@@ -195,6 +195,7 @@ async function help(msg) {
 Hi! I'm a bot for playing hacking CTFs. Here are my commands:
 - \`${prefix}help\`
 - \`${prefix}start\`
+- \`${prefix}cancel\`
 - \`${prefix}check <ANSWER>\`
       `.trim(),
       color: colors.info
