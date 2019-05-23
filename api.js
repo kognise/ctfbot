@@ -22,25 +22,38 @@ class API {
     return query
   }
 
-  async start(id) {
-    const res = await fetch(`${base}${this.formatQuery({
-      k: this.key,
-      op: 'start',
-      id
-    })}`)
+  async fetch(query) {
+    const res = await fetch(`${base}${query}`)
     const json = await res.json()
     return json
   }
 
+  async start(id) {
+    const query = this.formatQuery({
+      k: this.key,
+      op: 'start',
+      id
+    })
+    return await this.fetch(query)
+  }
+
+  async cancel(id) {
+    const query = this.formatQuery({
+      k: this.key,
+      op: 'endctf',
+      id
+    })
+    return await this.fetch(query)
+  }
+
   async check(id, answer) {
-    const res = await fetch(`${base}${this.formatQuery({
+    const query = this.formatQuery({
       k: this.key,
       op: 'answer',
       a: answer,
       id
-    })}`)
-    const json = await res.json()
-    return json
+    })
+    return await this.fetch(query)
   }
 }
 

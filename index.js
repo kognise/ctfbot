@@ -48,7 +48,7 @@ async function start(msg) {
         embed: {
           ...embedBase,
           title: 'CTF Already Started',
-          description: `It looks like you've already started a CTF! You can run \`${prefix}check <ANSWER>\` to check your results.`,
+          description: `It looks like you've already started a CTF! You can run \`${prefix}check <ANSWER>\` to check your results and \`${prefix}cancel\` to cancel it.`,
           color: colors.error
         }
       })
@@ -60,7 +60,7 @@ async function start(msg) {
       embed: {
         ...embedBase,
         title: 'CTF Started',
-        description: `Good job! You started a CTF. Good luck and have fun, and remember: beware programmers with screwdrivers. **Make sure to input your invite code quickly! It can only be used once.** You can submit an answer with \`${prefix}check <ANSWER>\``,
+        description: `Good job! You started a CTF. Good luck and have fun, and remember: beware programmers with screwdrivers. **Make sure to input your invite code quickly! It can only be used once.** You can submit an answer with \`${prefix}check <ANSWER>\`, and cancel the CTF with \`${prefix}cancel\`.`,
         fields: [
           {
             name: 'Target',
@@ -85,6 +85,32 @@ async function start(msg) {
             value: `\`${json.result.invite}\``
           }
         ]
+      }
+    })
+  }
+}
+
+async function cancel(msg) {
+  const json = await api.cancel(msg.author.id)
+  if (json.error) {
+    if (json.error === 'invalid id') {
+      await msg.channel.send({
+        embed: {
+          ...embedBase,
+          title: 'CTF Not Started',
+          description: `You haven't started a CTF yet! You can start one by running \`${prefix}start\` (but it would be silly to start a CTF just to cancel it).`,
+          color: colors.error
+        }
+      })
+    } else {
+      await sendError(msg, json.error)
+    }
+  } else {
+    await msg.channel.send({
+      embed: {
+        ...embedBase,
+        title: 'CTF Canceled',
+        description: `Your currently running CTF has been canceled! You can start a new one by runnig \`${prefix}start\` again.`
       }
     })
   }
@@ -123,7 +149,7 @@ async function check(msg) {
         embed: {
           ...embedBase,
           title: 'Out of Tries',
-          description: 'It looks like you ran out of tries! A command to cancel the CTF is coming very soon.',
+          description: `It looks like you ran out of tries! You can end the CTF by running \`${prefix}cancel\`.`,
           color: colors.error
         }
       })
@@ -179,6 +205,8 @@ Hi! I'm a bot for playing hacking CTFs. Here are my commands:
 client.on('message', async (msg) => {
   if (msg.content.startsWith(`${prefix}start`)) {
     await start(msg)
+  } else if (msg.content.startsWith(`${prefix}cancel`)) {
+    await cancel(msg)
   } else if (msg.content.startsWith(`${prefix}check`)) {
     await check(msg)
   } else if (msg.content.startsWith(`${prefix}help`)) {
