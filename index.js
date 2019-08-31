@@ -215,4 +215,8 @@ client.on('message', async (msg) => {
   }
 })
 
+client.on('ready', () => {
+  client.setActivity('for attacks | >ctfhelp', { type: 'WATCHING' })
+})
+
 client.login(process.env.BOT_TOKEN)
