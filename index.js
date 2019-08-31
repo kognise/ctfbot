@@ -35,7 +35,7 @@ async function sendError(msg, error) {
 }
 
 client.on('ready', () => {
-  client.user.setActivity('my own development', { type: 'WATCHING' })
+  client.user.setActivity('for attacks | >ctfhelp', { type: 'WATCHING' })
   embedBase.author.icon_url = client.user.avatarURL
   console.log(`> Logged in as ${client.user.tag}`)
 })
@@ -213,10 +213,6 @@ client.on('message', async (msg) => {
   } else if (msg.content.startsWith(`${prefix}help`)) {
     await help(msg)
   }
-})
-
-client.on('ready', () => {
-  client.setActivity('for attacks | >ctfhelp', { type: 'WATCHING' })
 })
 
 client.login(process.env.BOT_TOKEN)
